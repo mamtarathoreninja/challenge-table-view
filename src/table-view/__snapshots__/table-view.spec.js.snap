@@ -1,0 +1,47 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders a TableView 1`] = `
+<TableView
+  classes={
+    Object {
+      "flexDiv": "TableView-flexDiv-2",
+      "root": "TableView-root-1",
+      "table": "TableView-table-3",
+    }
+  }
+  columns={
+    Array [
+      Object {
+        "dataKey": "name",
+        "label": "Name",
+      },
+      Object {
+        "dataKey": "age",
+        "label": "Age",
+      },
+    ]
+  }
+  filter={
+    Array [
+      Object {
+        "dataKey": "name",
+        "label": "Name",
+      },
+    ]
+  }
+  rows={
+    Array [
+      Object {
+        "age": 25,
+        "id": 1245,
+        "name": "Mike",
+      },
+      Object {
+        "age": 30,
+        "id": 46874,
+        "name": "Jennifer",
+      },
+    ]
+  }
+/>
+`;
