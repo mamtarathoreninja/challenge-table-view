@@ -17,9 +17,9 @@ export default createReactClass({
   render () {
     const { items, label, ...rest } = this.props
     return (
-      <div style={{ display: 'flex', flexDirection: 'column' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', minWidth: '100px', marginRight: '10px' }}>
         <InputLabel style={{ fontSize: 12 }}>{label}</InputLabel>
-        <Select fullWidth {...rest}>
+        <Select {...rest}>
           {items.map(x => (
             <MenuItem key={x} value={x}>
               {x}

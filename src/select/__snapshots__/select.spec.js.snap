@@ -6,6 +6,8 @@ exports[`renders a Select 1`] = `
     Object {
       "display": "flex",
       "flexDirection": "column",
+      "marginRight": "10px",
+      "minWidth": "100px",
     }
   }
 >
@@ -17,7 +19,6 @@ exports[`renders a Select 1`] = `
     }
   />
   <WithStyles(Select)
-    fullWidth={true}
     value=""
   >
     <WithStyles(MenuItem)
