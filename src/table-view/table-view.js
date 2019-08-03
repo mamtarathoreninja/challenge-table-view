@@ -19,8 +19,19 @@ const TableView = createReactClass({
 
   getInitialState () {
     return {
-      filterFields: {}
+      filterFields: {},
+      tableRows: [],
+      options: {}
     }
+  },
+  componentDidMount () {
+    const {filter} = this.props
+    let { options } = this.state
+    this.getRows(this.state.filterFields)
+    filter.forEach((select) => {
+      options[select.dataKey] = this.getItems(select.dataKey)
+    })
+    this.setState({ options })
   },
   recursive (filterField, keys, counter, row) {
     if (filterField[keys[counter]].includes(row[keys[counter]])) {
@@ -31,17 +42,19 @@ const TableView = createReactClass({
       }
     }
   },
-  getRows () {
+  getRows (filterFields) {
     const {rows} = this.props
-    const {filterFields} = this.state
     const keys = Object.keys(filterFields)
+    let filteredRows = []
     if (keys.length !== 0) {
-      return rows.filter((row) => {
+      filteredRows = rows.filter((row) => {
         let counter = 0
         return this.recursive(filterFields, keys, counter, row)
       })
     }
-    return rows
+    this.setState({
+      tableRows: filteredRows.length ? filteredRows : rows
+    })
   },
 
   onlyUnique (value, index, self) {
@@ -51,22 +64,31 @@ const TableView = createReactClass({
     const {rows} = this.props
     return rows.map((row) => row[item]).filter(this.onlyUnique)
   },
+  handleOnChange: function (e) {
+    const { value = [], name } = e.target
+    const filterFields = { ...this.state.filterFields, [name]: value }
+    this.setState({ filterFields })
+    this.getRows(filterFields)
+  },
+  clearFilter: function () {
+    this.setState({filterFields: {}})
+  },
   render () {
     const { columns, classes, filter } = this.props
+    const { options } = this.state
     return (
       <Paper className={classes.root}>
         <div className={classes.flexDiv}>
           {filter.map((select) => {
             return (<Select
+              key={select.dataKey}
               multiple
               label={select.label}
+              data-select={select}
               value={this.state.filterFields[select.dataKey] || []}
               name={select.dataKey}
-              items={this.getItems(select.dataKey)}
-              onChange={e => {
-                const filterFields = { ...this.state.filterFields, [select.dataKey]: e.target.value }
-                this.setState({ filterFields })
-              }}
+              items={options[select.dataKey]}
+              onChange={this.handleOnChange}
             />)
           })}
           {Object.keys(this.state.filterFields).length > 0 && (<Button
@@ -74,13 +96,13 @@ const TableView = createReactClass({
             size='large'
             color='primary'
             className={classes.button}
-            onClick={(e) => this.setState({filterFields: {}})}
+            onClick={this.clearFilter}
           >
                 Clear Filters
           </Button>)}
         </div>
         <Table
-          rows={this.getRows()}
+          rows={this.state.tableRows}
           columns={columns} />
       </Paper>
     )
